@@ -1,2 +1,2 @@
-# ruby-basic-cheatsheet
-a basic ruby cheat sheet
+# Interactive Ruby Cheat Sheet
+- This document is a single-page interactive web application designed to serve as a quick and easy-to-use reference guide for core Ruby methods and concepts. It's built to be more user-friendly than a static document, with a focus on quick lookups and code examples.

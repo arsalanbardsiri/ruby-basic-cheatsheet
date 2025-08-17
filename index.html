@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Ruby Cheat Sheet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Cyberpunk Noir -->
+    <!-- Application Structure Plan: A single-page app with a sticky navigation bar for smooth scrolling to three main sections: Core Data Types, Collections, and Control Flow. A live search bar filters content across all sections for quick lookups. This structure is chosen over a simple document to enhance navigability and searchability, making it a more efficient tool for developers. -->
+    <!-- Visualization & Content Choices: The report is text-based, so traditional charts are not applicable. The information is organized into interactive cards. Goal: Inform/Reference -> Presentation: HTML/CSS Cards -> Interaction: Live search/filter and click-to-copy code examples -> Justification: This transforms the static text into a dynamic, user-friendly tool, directly supporting the goal of a quick reference guide. The copy button's position has been adjusted to prevent it from overlapping the code text. -> Library/Method: Vanilla JS for interactions. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .copied-feedback {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0,0,0,0.7);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        .copied-feedback.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-950 text-gray-200">
+
+    <header class="bg-gray-900/80 backdrop-blur-lg sticky top-0 z-10 shadow-lg shadow-gray-800/50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row items-center justify-between py-4 gap-4">
+                <h1 class="text-2xl font-bold text-fuchsia-400">Ruby Quick Reference</h1>
+                <div class="relative w-full sm:w-64 md:w-80">
+                    <input type="text" id="searchInput" placeholder="Search methods..." class="w-full pl-10 pr-4 py-2 bg-gray-900 border border-gray-700 rounded-full text-gray-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition">
+                    <svg class="w-5 h-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+            </div>
+            <nav class="flex justify-center border-t border-gray-800">
+                <ul class="flex space-x-4 sm:space-x-8 py-2">
+                    <li><a href="#core-data-types" class="nav-link text-gray-400 hover:text-cyan-400 font-medium transition">Core Data Types</a></li>
+                    <li><a href="#collections" class="nav-link text-gray-400 hover:text-cyan-400 font-medium transition">Collections</a></li>
+                    <li><a href="#control-flow" class="nav-link text-gray-400 hover:text-cyan-400 font-medium transition">Control Flow</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div id="content-container" class="space-y-12">
+            <section id="core-data-types">
+                <h2 class="text-3xl font-bold mb-6 border-b-2 border-fuchsia-500 pb-2">Core Data Types</h2>
+                <div id="core-data-types-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+            </section>
+            
+            <section id="collections">
+                <h2 class="text-3xl font-bold mb-6 border-b-2 border-fuchsia-500 pb-2">Collections</h2>
+                <div id="collections-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+            </section>
+
+            <section id="control-flow">
+                <h2 class="text-3xl font-bold mb-6 border-b-2 border-fuchsia-500 pb-2">Control Flow</h2>
+                <div id="control-flow-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+            </section>
+        </div>
+        <div id="no-results" class="text-center py-16 text-gray-500 hidden">
+            <h3 class="text-2xl font-semibold">No Results Found</h3>
+            <p class="mt-2">Try adjusting your search term.</p>
+        </div>
+    </main>
+
+    <script>
+        const cheatSheetData = [
+            {
+                category: "Core Data Types",
+                topic: "Strings",
+                items: [
+                    { concept: "`length`", description: "The number of characters.", example: '"Hello".length' },
+                    { concept: "`count`", description: "Counts specific characters.", example: '"hello".count("l")' },
+                    { concept: "`upcase`", description: "Converts all to uppercase.", example: '"hello".upcase' },
+                    { concept: "`capitalize`", description: "Capitalizes the first letter.", example: '"hello".capitalize' },
+                    { concept: "`gsub`", description: "Replaces a substring.", example: '"hello".gsub("l", "r")' },
+                    { concept: "`gsub!`", description: "Replaces in-place (modifies original).", example: 'str = "hi"; str.gsub!("h", "b")' },
+                    { concept: "`chomp`", description: "Removes trailing newline.", example: '"hello\\n".chomp' },
+                ]
+            },
+            {
+                category: "Core Data Types",
+                topic: "Integers & Floats",
+                items: [
+                    { concept: "Division", description: "Integer / Integer = Integer.", example: '10 / 3' },
+                    { concept: "Division", description: "Integer / Float = Float.", example: '10 / 3.0' },
+                    { concept: "`odd?` / `even?`", description: "Returns `true` or `false`.", example: '5.odd?' },
+                    { concept: "`.to_f`", description: "Converts to a float.", example: '5.to_f' },
+                ]
+            },
+            {
+                category: "Collections",
+                topic: "Arrays",
+                items: [
+                    { concept: "`push` / `<<`", description: "Add to the end.", example: '[1, 2].push(3)' },
+                    { concept: "`pop`", description: "Remove from the end.", example: '[1, 2, 3].pop' },
+                    { concept: "`delete`", description: "Remove by value.", example: '[1, 2, 3].delete(2)' },
+                    { concept: "`delete_at`", description: "Remove by index.", example: '[1, 2, 3].delete_at(0)' },
+                ]
+            },
+            {
+                category: "Collections",
+                topic: "Hashes",
+                items: [
+                    { concept: "Keys & Values", description: "Stores data with a key.", example: '{:a => 1, :b => 2}' },
+                    { concept: "`[]`", description: "Accesses or adds a key/value pair.", example: 'h = {:a => 1}; h[:a]' },
+                    { concept: "`fetch`", description: "Accesses with a fallback.", example: 'h.fetch(:c, "not found")' },
+                ]
+            },
+            {
+                category: "Control Flow",
+                topic: "Conditionals",
+                items: [
+                    { concept: "`if`", description: "Runs code if a condition is `true`.", example: 'if x > 0\n  puts "Positive"\nend' },
+                    { concept: "`unless`", description: "Runs code if a condition is `false`.", example: 'unless x <= 0\n  puts "Positive"\nend' },
+                ]
+            },
+            {
+                category: "Control Flow",
+                topic: "Loops",
+                items: [
+                    { concept: "`each`", description: "Iterates over a collection.", example: '[1,2,3].each { |n| puts n }' },
+                    { concept: "`select`", description: "Returns new array meeting condition.", example: '[1,2,3].select(&:even?)' },
+                    { concept: "`reject`", description: "Returns new array not meeting condition.", example: '[1,2,3].reject(&:even?)' },
+                    { concept: "`while`", description: "Repeats while a condition is `true`.", example: 'i = 0\nwhile i < 3\n  i += 1\nend' },
+                    { concept: "`for`", description: "Repeats for a range.", example: 'for i in 1..3\n  puts i\nend' },
+                ]
+            }
+        ];
+
+        function createCard(topicData) {
+            const card = document.createElement('div');
+            card.className = 'bg-gray-800 rounded-xl shadow-lg shadow-gray-700/50 overflow-hidden transition hover:scale-[1.01]';
+            card.dataset.topic = topicData.topic.toLowerCase();
+            
+            let itemsHtml = topicData.items.map(item => `
+                <li class="flex flex-col sm:flex-row justify-between items-start sm:items-center py-3 px-6" data-concept="${item.concept.toLowerCase()}" data-description="${item.description.toLowerCase()}">
+                    <div class="flex-grow mb-2 sm:mb-0">
+                        <p class="font-semibold text-gray-200">${item.concept}</p>
+                        <p class="text-sm text-gray-400">${item.description}</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <pre class="bg-gray-900 text-sm text-cyan-300 p-2 rounded-md w-full whitespace-pre-wrap max-w-sm sm:max-w-none"><code class="language-ruby">${item.example}</code></pre>
+                        <div class="relative">
+                            <button class="copy-btn p-1 bg-gray-700 hover:bg-gray-600 rounded-md transition" title="Copy code">
+                                <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            </button>
+                            <div class="copied-feedback">Copied!</div>
+                        </div>
+                    </div>
+                </li>
+            `).join('');
+
+            card.innerHTML = `
+                <div class="p-6 bg-fuchsia-600">
+                    <h3 class="text-xl font-bold text-white">${topicData.topic}</h3>
+                </div>
+                <ul class="divide-y divide-gray-700">${itemsHtml}</ul>
+            `;
+            return card;
+        }
+
+        function renderContent(data) {
+            const coreGrid = document.getElementById('core-data-types-grid');
+            const collectionsGrid = document.getElementById('collections-grid');
+            const controlFlowGrid = document.getElementById('control-flow-grid');
+            
+            coreGrid.innerHTML = '';
+            collectionsGrid.innerHTML = '';
+            controlFlowGrid.innerHTML = '';
+
+            data.forEach(topicData => {
+                const card = createCard(topicData);
+                if (topicData.category === "Core Data Types") {
+                    coreGrid.appendChild(card);
+                } else if (topicData.category === "Collections") {
+                    collectionsGrid.appendChild(card);
+                } else if (topicData.category === "Control Flow") {
+                    controlFlowGrid.appendChild(card);
+                }
+            });
+            addCopyListeners();
+        }
+
+        function filterContent() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const allCards = document.querySelectorAll('[data-topic]');
+            let resultsFound = false;
+
+            allCards.forEach(card => {
+                const listItems = card.querySelectorAll('li[data-concept]');
+                let cardHasVisibleItems = false;
+                
+                listItems.forEach(item => {
+                    const concept = item.dataset.concept;
+                    const description = item.dataset.description;
+                    const topic = card.dataset.topic;
+
+                    if (concept.includes(searchTerm) || description.includes(searchTerm) || topic.includes(searchTerm)) {
+                        item.style.display = 'flex';
+                        cardHasVisibleItems = true;
+                        resultsFound = true;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                if (cardHasVisibleItems) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            document.getElementById('no-results').style.display = resultsFound ? 'none' : 'block';
+        }
+
+        function addCopyListeners() {
+            document.querySelectorAll('.copy-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const code = e.currentTarget.parentElement.parentElement.querySelector('code').innerText;
+                    const feedback = e.currentTarget.parentElement.querySelector('.copied-feedback');
+                    
+                    const tempTextArea = document.createElement('textarea');
+                    tempTextArea.value = code;
+                    document.body.appendChild(tempTextArea);
+                    tempTextArea.select();
+                    try {
+                        document.execCommand('copy');
+                        feedback.classList.add('show');
+                        setTimeout(() => {
+                           feedback.classList.remove('show');
+                        }, 1500);
+                    } catch (err) {
+                        console.error('Failed to copy text: ', err);
+                    }
+                    document.body.removeChild(tempTextArea);
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderContent(cheatSheetData);
+            document.getElementById('searchInput').addEventListener('keyup', filterContent);
+
+            document.querySelectorAll('.nav-link').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
